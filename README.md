@@ -6,7 +6,7 @@ Working in progress... Now only support GitHub.
 
 ## Why
 
-`dlgit` can download only part of a git repository by using `spare checkout` and cache, it can reduce the time to download the entire repository.
+`dlgit` can download only part of a git repository by using `sparse checkout` and cache, it can reduce the time to download the entire repository.
 
 ## Usage
 
