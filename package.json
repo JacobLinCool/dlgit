@@ -1,10 +1,12 @@
 {
     "name": "dlgit",
     "version": "0.1.1",
-    "description": "",
+    "description": "Download part of a git repository without wasting your bandwidth.",
     "keywords": [
         "Git",
-        "Download"
+        "Download",
+        "CLI",
+        "API"
     ],
     "author": "JacobLinCool <hi@jacoblin.cool> (https://github.com/JacobLinCool)",
     "license": "MIT",
@@ -33,5 +35,13 @@
         "@trivago/prettier-plugin-sort-imports": "^3.2.0",
         "prettier": "^2.6.2",
         "tsup": "^5.12.7"
+    },
+    "homepage": "https://github.com/JacobLinCool/dlgit#readme",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/JacobLinCool/dlgit.git"
+    },
+    "bugs": {
+        "url": "https://github.com/JacobLinCool/dlgit/issues"
     }
 }
