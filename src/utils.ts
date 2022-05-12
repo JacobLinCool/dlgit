@@ -1,4 +1,5 @@
 import crypto from "node:crypto";
+import path from "node:path";
 
 const domain_suffix: Record<string, string> = {
     github: "com",
@@ -17,18 +18,17 @@ export function locate(location: string): {
     branch: string;
 } {
     const regex =
-        /^(?:(?:https:\/\/)?([^:/]+\.[^:/]+)\/|git@([^:/]+)[:/]|([^/]+):)?([^/\s]+)\/([^/\s#]+)(?:\/)?(?:#(.+))?/;
+        /^(?:(?:https:\/\/)?([^:/]+\.[^:/]+)\/|git@([^:/]+)[:/]|([^/]+):)?([^/\s]+)\/([^\s#]+)(?:\/)?(?:#(.+))?/;
     const match = regex.exec(location);
 
     const [_, http_domain, ssh_domain, prefix, owner, repo, branch] = match;
     const site = (http_domain || ssh_domain || prefix || "github").replace(/\.(com|org)$/, "");
-    if (!domain_suffix[site]) {
-        return null;
-    }
 
     return {
-        url: `https://${site}.${domain_suffix[site]}/${owner}/${repo}`,
-        repo,
+        url: `https://${site}${
+            domain_suffix[site] ? `.${domain_suffix[site]}` : ""
+        }/${owner}/${repo}`,
+        repo: path.basename(repo || location.split("/").filter(Boolean).pop(), ".git"),
         branch: branch || "",
     };
 }
