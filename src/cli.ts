@@ -57,9 +57,19 @@ program
 
 program
     .command("clear-cache")
+    .description("Clear the cache")
     .option("-c, --cache [cache]", "Cache directory", default_cache)
     .action(function () {
         clear_cache(this.opts().cache);
+    });
+
+program
+    .command("parse <remote>")
+    .description("Parse remote repository location")
+    .action(function () {
+        const remote = this.args[0];
+        const location = locate(remote);
+        console.log(JSON.stringify(location, null, 4));
     });
 
 program.parse();
