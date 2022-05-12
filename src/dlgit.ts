@@ -3,7 +3,8 @@ import os from "node:os";
 import path from "node:path";
 import fs from "fs-extra";
 import simple_git from "simple-git";
-import { setup_cache } from "./cache";
+import { default_cache, setup_cache } from "./cache";
+import { hash, locate } from "./utils";
 
 export class Dlgit extends EventEmitter {
     constructor() {
@@ -11,23 +12,28 @@ export class Dlgit extends EventEmitter {
     }
 
     async download({
-        owner = "",
-        repo = "",
-        branch = "",
-        dir = "",
-        cache = path.join(os.tmpdir(), ".dlgit"),
+        remote = "",
+        sub = "",
+        cache = default_cache,
         ttl = 1000 * 60 * 60 * 24,
         to = process.cwd(),
     } = {}) {
         setup_cache(cache);
-        const temp = path.join(cache, `-${owner}-${repo}-${branch}`);
-        const completed = path.join(cache, `${owner}-${repo}-${branch}`);
+
+        const location = locate(remote);
+        if (!location) {
+            throw new Error(`Invalid remote location: ${remote}`);
+        }
+
+        const key = hash(location.url + "|" + location.branch);
+        const temp = path.join(cache, `-${key}`);
+        const completed = path.join(cache, key);
 
         if (
-            !fs.existsSync(path.join(completed, dir, ".dlgit")) ||
-            fs.statSync(path.join(completed, dir, ".dlgit")).mtimeMs < Date.now() - ttl
+            !fs.existsSync(path.join(completed, sub, ".dlgit")) ||
+            fs.statSync(path.join(completed, sub, ".dlgit")).mtimeMs < Date.now() - ttl
         ) {
-            this.emit("download", { temp, cache: completed });
+            this.emit("download", { location, sub, temp, cache: completed });
 
             if (fs.existsSync(temp)) {
                 fs.rmSync(temp, { recursive: true });
@@ -36,38 +42,41 @@ export class Dlgit extends EventEmitter {
             const git = simple_git({ baseDir: temp });
 
             const config: Record<string, null | string> = {
+                "--filter=blob:none": null,
                 "--no-checkout": null,
                 "--depth": "1",
                 "--single-branch": null,
             };
-            if (branch) {
-                config["--branch"] = branch;
+            if (location.branch) {
+                config["--branch"] = location.branch;
             }
-            await git.clone(`https://github.com/${owner}/${repo}/`, temp, config);
+            await git.clone(location.url, temp, config);
+            this.emit("cloned", { location, temp });
 
-            if (dir) {
+            if (sub) {
                 await git.addConfig("core.sparseCheckout", "true");
-                fs.writeFileSync(path.join(temp, ".git/info/sparse-checkout"), dir);
+                fs.writeFileSync(path.join(temp, ".git/info/sparse-checkout"), sub);
             }
 
-            branch = (await git.branchLocal()).current;
-            await git.checkout(branch);
+            location.branch = (await git.branchLocal()).current;
+            await git.checkout(location.branch);
+            this.emit("checkedout", { location, temp });
 
             fs.rmSync(path.join(temp, ".git"), { recursive: true });
             fs.cpSync(temp, completed, { recursive: true, preserveTimestamps: true });
-            fs.writeFileSync(path.join(completed, dir, ".dlgit"), Date.now().toString());
+            fs.writeFileSync(path.join(completed, sub, ".dlgit"), Date.now().toString());
             this.emit("downloaded", { cached: completed });
             fs.rmSync(temp, { recursive: true });
         } else {
             this.emit("cached", {
                 cached: completed,
-                ttl: ttl - (Date.now() - fs.statSync(path.join(completed, dir)).mtimeMs),
+                ttl: ttl - (Date.now() - fs.statSync(path.join(completed, sub)).mtimeMs),
             });
         }
 
-        fs.copySync(path.join(completed, dir), path.join(to, path.basename(dir || repo)));
-        fs.rmSync(path.join(to, path.basename(dir || repo), ".dlgit"));
-        this.emit("done", { dest: path.resolve(to, path.basename(dir || repo)) });
+        fs.copySync(path.join(completed, sub), path.join(to, path.basename(sub || location.repo)));
+        fs.rmSync(path.join(to, path.basename(sub || location.repo), ".dlgit"));
+        this.emit("done", { dest: path.resolve(to, path.basename(sub || location.repo)) });
     }
 
     public dl = this.download;
