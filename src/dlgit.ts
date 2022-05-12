@@ -1,5 +1,4 @@
 import EventEmitter from "node:events";
-import os from "node:os";
 import path from "node:path";
 import fs from "fs-extra";
 import simple_git from "simple-git";
@@ -16,7 +15,8 @@ export class Dlgit extends EventEmitter {
         sub = "",
         cache = default_cache,
         ttl = 1000 * 60 * 60 * 24,
-        to = process.cwd(),
+        to = "",
+        force = false,
     } = {}) {
         setup_cache(cache);
 
@@ -45,7 +45,6 @@ export class Dlgit extends EventEmitter {
                 "--filter=blob:none": null,
                 "--no-checkout": null,
                 "--depth": "1",
-                "--single-branch": null,
             };
             if (location.branch) {
                 config["--branch"] = location.branch;
@@ -58,12 +57,15 @@ export class Dlgit extends EventEmitter {
                 fs.writeFileSync(path.join(temp, ".git/info/sparse-checkout"), sub);
             }
 
-            location.branch = (await git.branchLocal()).current;
+            const branch = (await git.branchLocal()).current;
+            if (!location.branch) {
+                location.branch = branch;
+            }
             await git.checkout(location.branch);
             this.emit("checkedout", { location, temp });
 
             fs.rmSync(path.join(temp, ".git"), { recursive: true });
-            fs.cpSync(temp, completed, { recursive: true, preserveTimestamps: true });
+            fs.copySync(temp, completed, { recursive: true, preserveTimestamps: true });
             fs.writeFileSync(path.join(completed, sub, ".dlgit"), Date.now().toString());
             this.emit("downloaded", { cached: completed });
             fs.rmSync(temp, { recursive: true });
@@ -74,9 +76,14 @@ export class Dlgit extends EventEmitter {
             });
         }
 
-        fs.copySync(path.join(completed, sub), path.join(to, path.basename(sub || location.repo)));
-        fs.rmSync(path.join(to, path.basename(sub || location.repo), ".dlgit"));
-        this.emit("done", { dest: path.resolve(to, path.basename(sub || location.repo)) });
+        to = path.resolve(to || path.join(process.cwd(), path.basename(sub || location.repo)));
+        if (!force && fs.existsSync(to) && fs.readdirSync(to).length > 0) {
+            throw new Error(`Target directory "${to}" is not empty`);
+        }
+
+        fs.copySync(path.join(completed, sub), to);
+        fs.rmSync(path.join(to, ".dlgit"));
+        this.emit("done", { dest: to });
     }
 
     public dl = this.download;

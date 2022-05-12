@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 import fs from "node:fs";
-import os from "node:os";
 import path from "node:path";
 import { Command } from "commander";
 import ora from "ora";
 import { clear_cache, default_cache } from "./cache";
 import Dlgit from "./dlgit";
+import { locate } from "./utils";
 
 const package_json = JSON.parse(
     fs.readFileSync(path.join(__dirname, "..", "package.json"), "utf8"),
@@ -21,7 +21,8 @@ program
     .option("-s, --sub <dir>", "Subdirectory to download", "")
     .option("-c, --cache <cache>", "Cache directory", default_cache)
     .option("-T, --ttl <ttl>", "Cache TTL (ms)", (1000 * 60 * 60 * 24).toString())
-    .option("-t, --to <to>", "Destination directory", process.cwd())
+    .option("-t, --to <to>", "Destination directory", "")
+    .option("-f, --force", "Overwrite existing directory if it exists", false)
     .action(function () {
         const start = Date.now();
         const opts = this.opts();
@@ -49,7 +50,9 @@ program
                 `Done in ${((Date.now() - start) / 1000).toFixed(2)} s! (dest: ${data.dest})`,
             );
         });
-        dlgit.download(opts);
+        dlgit.download(opts).catch((err) => {
+            spinner.fail(err.message);
+        });
     });
 
 program
