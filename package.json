@@ -1,0 +1,37 @@
+{
+    "name": "dlgit",
+    "version": "0.1.1",
+    "description": "",
+    "keywords": [
+        "Git",
+        "Download"
+    ],
+    "author": "JacobLinCool <hi@jacoblin.cool> (https://github.com/JacobLinCool)",
+    "license": "MIT",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "bin": {
+        "dlgit": "dist/cli.js",
+        "dg": "dist/cli.js"
+    },
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "prepare": "tsup",
+        "dev": "tsup --watch",
+        "build": "npm run format && tsup",
+        "format": "prettier --write '**/*.{js,ts}' --ignore-path .gitignore"
+    },
+    "dependencies": {
+        "commander": "^9.2.0",
+        "fs-extra": "^10.1.0",
+        "ora": "^5.4.1",
+        "simple-git": "^3.7.1"
+    },
+    "devDependencies": {
+        "@trivago/prettier-plugin-sort-imports": "^3.2.0",
+        "prettier": "^2.6.2",
+        "tsup": "^5.12.7"
+    }
+}
