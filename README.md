@@ -30,17 +30,17 @@ npx dlgit --help
 
 ```sh
 ❯ dlgit -h
-Usage: dlgit [options] [command]
+Usage: dlgit [options] [command] <remote>
+
+Arguments:
+  remote                 Remote repository to download from (e.g. Open-OJ/3OJ#gh-pages)
 
 Options:
   -V, --version          output the version number
-  -o, --owner [owner]    Github Owner
-  -r, --repo [repo]      Github Repo
-  -b, --branch [branch]  Github Branch
-  -d, --dir [dir]        Directory to download
-  -c, --cache [cache]    Cache directory
-  -T, --ttl [ttl]        Cache TTL (ms)
-  -t, --to [to]          Destination directory
+  -s, --sub <dir>        Subdirectory to download (default: "")
+  -c, --cache <cache>    Cache directory
+  -T, --ttl <ttl>        Cache TTL (ms)
+  -t, --to <to>          Destination directory
   -h, --help             display help for command
 
 Commands:
@@ -54,13 +54,12 @@ It supports both `ESM` and `CJS` modules.
 ```ts
 import Dlgit from "dlgit";
 
-Dlgit.dl({
-    owner: "owner",
-    repo: "repo",
-    branch: "branch",
-    dir: "dir",
-    cache: "cache",
+const dlgit = new Dlgit();
+dlgit.dl({
+    remote: "Open-OJ/3OJ#gh-pages",
+    sub: "problems",
+    cache: "cache-dir",
     ttl: 1000 * 60 * 60 * 24,
-    to: "to",
+    to: "destination-dir"
 });
 ```
