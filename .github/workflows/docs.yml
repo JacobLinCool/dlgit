@@ -1,0 +1,38 @@
+name: Build Docs
+
+on:
+    push:
+        branches:
+            - main
+    workflow_dispatch:
+
+jobs:
+    build_and_deploy:
+        name: Build Docs
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+
+            - name: Install PNPM
+              run: npm i -g pnpm
+
+            - uses: actions/cache@v3
+              with:
+                  path: ~/.pnpm
+                  key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node-
+
+            - name: Install Packages
+              run: pnpm i
+
+            - name: TypeDoc Build
+              run: pnpm run docs
+
+            - name: Deploy
+              uses: peaceiris/actions-gh-pages@v3
+              with:
+                  github_token: ${{ secrets.GITHUB_TOKEN  }}
+                  publish_dir: "./docs"
+                  publish_branch: "gh-pages"
