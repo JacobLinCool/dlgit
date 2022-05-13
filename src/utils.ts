@@ -5,7 +5,7 @@ const domain_suffix: Record<string, string> = {
     github: "com",
     gitlab: "com",
     bitbucket: "org",
-};
+} as const;
 
 /**
  * Locate the URL of given repository.
@@ -20,6 +20,10 @@ export function locate(location: string): {
     const regex =
         /^(?:(?:https:\/\/)?([^:/]+\.[^:/]+)\/|git@([^:/]+)[:/]|([^/]+):)?([^/\s]+)\/([^\s#]+)(?:\/)?(?:#(.+))?/;
     const match = regex.exec(location);
+
+    if (!match) {
+        return null;
+    }
 
     const [_, http_domain, ssh_domain, prefix, owner, repo, branch] = match;
     const site = (http_domain || ssh_domain || prefix || "github").replace(/\.(com|org)$/, "");
