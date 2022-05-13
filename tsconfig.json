@@ -6,7 +6,8 @@
         "noImplicitAny": true,
         "preserveConstEnums": true,
         "sourceMap": false,
-        "moduleResolution": "node"
+        "moduleResolution": "node",
+        "skipLibCheck": true
     },
     "include": ["src/**/*"]
 }
