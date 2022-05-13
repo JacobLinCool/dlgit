@@ -28,6 +28,9 @@ jobs:
 
             - name: Jest
               uses: ArtiomTr/jest-coverage-report-action@v2.0.6
+              with:
+                  skip-step: install
+                  package-manager: pnpm
 
             - name: Build
               run: pnpm build
