@@ -28,8 +28,10 @@ jobs:
 
             - name: Jest
               uses: ArtiomTr/jest-coverage-report-action@v2.0.6
-              with:
-                  github-token: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Build
               run: pnpm build
+
+permissions:
+    checks: write
+    pull-requests: write
