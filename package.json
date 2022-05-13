@@ -25,6 +25,7 @@
         "test:keep": "mkdir testzone && cd testzone && jest --coverage",
         "dev": "tsup --watch",
         "build": "npm run format && tsup",
+        "docs": "typedoc src/index.ts",
         "format": "prettier --write '**/*.{js,ts}' --ignore-path .gitignore"
     },
     "dependencies": {
