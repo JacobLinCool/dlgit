@@ -1,0 +1,35 @@
+name: Pull Request Check
+
+on:
+    pull_request:
+        branches:
+            - main
+
+jobs:
+    pull_request_check:
+        name: Pull Request Check
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+
+            - name: Install PNPM
+              run: npm i -g pnpm
+
+            - uses: actions/cache@v3
+              with:
+                  path: ~/.pnpm
+                  key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node-
+
+            - name: Install Packages
+              run: pnpm i
+
+            - name: Jest
+              uses: ArtiomTr/jest-coverage-report-action@v2.0.6
+              with:
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Build
+              run: pnpm build
