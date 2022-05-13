@@ -10,14 +10,10 @@ export class Dlgit extends EventEmitter {
         super();
     }
 
-    async download({
+    async download(
         remote = "",
-        sub = "",
-        cache = default_cache,
-        ttl = 1000 * 60 * 60 * 24,
-        to = "",
-        force = false,
-    } = {}) {
+        { sub = "", cache = default_cache, ttl = 1000 * 60 * 60 * 24, to = "", force = false } = {},
+    ) {
         setup_cache(cache);
 
         const location = locate(remote);

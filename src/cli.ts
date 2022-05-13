@@ -5,7 +5,6 @@ import { Command } from "commander";
 import ora from "ora";
 import { clear_cache, default_cache } from "./cache";
 import Dlgit from "./dlgit";
-import { locate } from "./utils";
 
 const package_json = JSON.parse(
     fs.readFileSync(path.join(__dirname, "..", "package.json"), "utf8"),
@@ -27,7 +26,6 @@ program
         const start = Date.now();
         const opts = this.opts();
         opts.ttl = parseInt(opts.ttl, 10);
-        opts.remote = program.args[0];
         const dlgit = new Dlgit();
         const spinner = ora(`Starting...`).start();
         dlgit.on("download", (data) => {
@@ -50,7 +48,7 @@ program
                 `Done in ${((Date.now() - start) / 1000).toFixed(2)} s! (dest: ${data.dest})`,
             );
         });
-        dlgit.download(opts).catch((err) => {
+        dlgit.download(this.args[0], opts).catch((err) => {
             spinner.fail(err.message);
         });
     });
