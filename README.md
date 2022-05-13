@@ -2,7 +2,7 @@
 
 Download part of a git repository without wasting your bandwidth.
 
-## Why
+## Why & How
 
 `dlgit` can download only part of a git repository and reduce the time and bandwidth you spend downloading the whole repository.
 
@@ -58,14 +58,16 @@ Arguments:
 
 Options:
   -V, --version          output the version number
-  -s, --sub <dir>        Subdirectory to download (default: "")
+  -s, --sub <dir>        Subdirectory to download
   -c, --cache <cache>    Cache directory
   -T, --ttl <ttl>        Cache TTL (ms)
   -t, --to <to>          Destination directory
+  -f, --force            Overwrite existing directory if it exists
   -h, --help             display help for command
 
 Commands:
-  clear-cache [options]
+  clear-cache [options]  Clear the cache
+  parse <remote>         Parse remote repository location
 ```
 
 ## API
@@ -76,11 +78,11 @@ It supports both `ESM` and `CJS` modules.
 import Dlgit from "dlgit";
 
 const dlgit = new Dlgit();
-dlgit.dl({
-    remote: "Open-OJ/3OJ#gh-pages",
+dlgit.dl("Open-OJ/3OJ#gh-pages", {
     sub: "problems",
     cache: "cache-dir",
     ttl: 1000 * 60 * 60 * 24,
     to: "destination-dir"
 });
+// all options are optional
 ```
