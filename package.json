@@ -1,6 +1,6 @@
 {
     "name": "dlgit",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "description": "Download part of a git repository without wasting your bandwidth.",
     "keywords": [
         "Git",

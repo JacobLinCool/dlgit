@@ -4,6 +4,8 @@ Download part of a git repository without wasting your bandwidth.
 
 [NPM Package](https://www.npmjs.com/package/dlgit) | [GitHub Repository](https://github.com/JacobLinCool/dlgit) | [Documentation](https://jacoblincool.github.io/dlgit/)
 
+![DEMO](./demo/demo.gif)
+
 ## Why & How
 
 `dlgit` can download only part of a git repository and reduce the time and bandwidth you spend downloading the whole repository.
@@ -15,9 +17,10 @@ Download part of a git repository without wasting your bandwidth.
     - `--filter=blob:none` to avoid downloading all file contents.
     - `--no-checkout` to avoid automatically checking out the files.
     - `--depth=1` to avoid downloading history of the repository.
-3. `git checkout` to check out the files you need.
-4. remove `.git` directory to avoid messing up the files.
-5. cache the files in the local cache.
+3. setup `sparse-checkout` to only download the files that are required.
+4. `git checkout` to check out the files you need.
+5. remove `.git` directory to avoid messing up the files.
+6. cache the files in the local cache.
 
 ## Usage
 
