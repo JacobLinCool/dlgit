@@ -83,6 +83,15 @@ export class Dlgit extends EventEmitter {
     }
 
     public dl = this.download;
+
+    parse(remote: string) {
+        const location = locate(remote);
+        if (!location) {
+            throw new Error(`Invalid remote location: ${remote}`);
+        }
+
+        return location;
+    }
 }
 
 export default Dlgit;
