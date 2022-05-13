@@ -65,9 +65,11 @@ program
     .command("parse <remote>")
     .description("Parse remote repository location")
     .action(function () {
-        const remote = this.args[0];
-        const location = locate(remote);
-        console.log(JSON.stringify(location, null, 4));
+        try {
+            console.log(JSON.stringify(new Dlgit().parse(this.args[0]), null, 4));
+        } catch (err) {
+            console.error(err.message);
+        }
     });
 
 program.parse();
