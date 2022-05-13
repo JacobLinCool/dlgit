@@ -22,8 +22,8 @@ export class Dlgit extends EventEmitter {
         }
 
         const key = hash(location.url + "|" + location.branch);
-        const temp = path.join(cache, `-${key}`);
-        const completed = path.join(cache, key);
+        const temp = path.resolve(cache, `-${key}`);
+        const completed = path.resolve(cache, key);
 
         if (
             !fs.existsSync(path.join(completed, sub, ".dlgit")) ||
