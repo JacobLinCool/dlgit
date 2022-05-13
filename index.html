@@ -1,0 +1,57 @@
+<!DOCTYPE html><html class="default"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>dlgit</title><meta name="description" content="Documentation for dlgit"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script async src="assets/search.js" id="search-script"></script></head><body><script>document.body.classList.add(localStorage.getItem("tsd-theme") || "os")</script><header><div class="tsd-page-toolbar"><div class="container"><div class="table-wrap"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget search no-caption">Search</label><input type="text" id="tsd-search-field"/></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">dlgit</a></div><div class="table-cell" id="tsd-widgets"><div id="tsd-filter"><a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a><div class="tsd-filter-group"><div class="tsd-select" id="tsd-filter-visibility"><span class="tsd-select-label">All</span><ul class="tsd-select-list"><li data-value="public">Public</li><li data-value="protected">Public/Protected</li><li data-value="private" class="selected">All</li></ul></div> <input type="checkbox" id="tsd-filter-inherited" checked/><label class="tsd-widget" for="tsd-filter-inherited">Inherited</label><input type="checkbox" id="tsd-filter-externals" checked/><label class="tsd-widget" for="tsd-filter-externals">Externals</label></div></div><a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a></div></div></div></div><div class="tsd-page-title"><div class="container"><h1>dlgit </h1></div></div></header><div class="container container-main"><div class="row"><div class="col-8 col-content"><div class="tsd-panel tsd-typography">
+<a href="#dlgit" id="dlgit" style="color: inherit; text-decoration: none;">
+  <h1>dlgit</h1>
+</a>
+<p>Download part of a git repository without wasting your bandwidth.</p>
+
+<a href="#why-amp-how" id="why-amp-how" style="color: inherit; text-decoration: none;">
+  <h2>Why &amp; How</h2>
+</a>
+<p><code>dlgit</code> can download only part of a git repository and reduce the time and bandwidth you spend downloading the whole repository.</p>
+<p><code>dlgit</code> does the followings:</p>
+<ol>
+<li>serve the files from the local cache if they are available.</li>
+<li><code>git clone</code> with optimized options.<ul>
+<li><code>--filter=blob:none</code> to avoid downloading all file contents.</li>
+<li><code>--no-checkout</code> to avoid automatically checking out the files.</li>
+<li><code>--depth=1</code> to avoid downloading history of the repository.</li>
+</ul>
+</li>
+<li><code>git checkout</code> to check out the files you need.</li>
+<li>remove <code>.git</code> directory to avoid messing up the files.</li>
+<li>cache the files in the local cache.</li>
+</ol>
+
+<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
+  <h2>Usage</h2>
+</a>
+
+<a href="#install-globally" id="install-globally" style="color: inherit; text-decoration: none;">
+  <h3>Install Globally</h3>
+</a>
+<pre><code class="language-sh"><span class="hl-0">npm i -g dlgit</span><br/><span class="hl-0">dlgit --help</span><br/><br/><span class="hl-1"># dg --help</span><br/><span class="hl-1"># this should work as well since dg is the alias of dlgit</span>
+</code></pre>
+<pre><code class="language-sh"><span class="hl-0">dg --sub /packages/create-vite/template-vue-ts </span><span class="hl-2">&quot;vitejs/vite#v2.9.9&quot;</span><br/><span class="hl-1"># download the files in the subdirectory `packages/create-vite/template-vue-ts` in </span><br/><span class="hl-1"># tag `v2.9.9` of the GitHub repository `vitejs/vite`</span>
+</code></pre>
+
+<a href="#just-run" id="just-run" style="color: inherit; text-decoration: none;">
+  <h3>Just Run</h3>
+</a>
+<pre><code class="language-sh"><span class="hl-0">npx dlgit --help</span>
+</code></pre>
+<pre><code class="language-sh"><span class="hl-0">npx dlgit --sub /public </span><span class="hl-2">&quot;https://gitlab.noj.tw/noj/codebase/frontend.git#readme&quot;</span><br/><span class="hl-1"># download the files in the subdirectory `public` in </span><br/><span class="hl-1"># branch `readme` of the repository `https://gitlab.noj.tw/noj/codebase/frontend.git`</span>
+</code></pre>
+
+<a href="#help" id="help" style="color: inherit; text-decoration: none;">
+  <h2>Help</h2>
+</a>
+<pre><code class="language-sh"><span class="hl-0">❯ dlgit -h</span><br/><span class="hl-0">Usage: dlgit [options] [command] &lt;remote&gt;</span><br/><br/><span class="hl-0">Arguments:</span><br/><span class="hl-0">  remote                 Remote repository to download from (e.g. Open-OJ/3OJ#gh-pages)</span><br/><br/><span class="hl-0">Options:</span><br/><span class="hl-0">  -V, --version          output the version number</span><br/><span class="hl-0">  -s, --sub &lt;dir&gt;        Subdirectory to download</span><br/><span class="hl-0">  -c, --cache &lt;cache&gt;    Cache directory</span><br/><span class="hl-0">  -T, --ttl &lt;ttl&gt;        Cache TTL (ms)</span><br/><span class="hl-0">  -t, --to &lt;to&gt;          Destination directory</span><br/><span class="hl-0">  -f, --force            Overwrite existing directory </span><span class="hl-3">if</span><span class="hl-0"> it exists</span><br/><span class="hl-0">  -h, --help             display </span><span class="hl-4">help</span><span class="hl-0"> </span><span class="hl-3">for</span><span class="hl-0"> </span><span class="hl-4">command</span><br/><br/><span class="hl-0">Commands:</span><br/><span class="hl-0">  clear-cache [options]  Clear the cache</span><br/><span class="hl-0">  parse &lt;remote&gt;         Parse remote repository location</span>
+</code></pre>
+
+<a href="#api" id="api" style="color: inherit; text-decoration: none;">
+  <h2>API</h2>
+</a>
+<p>It supports both <code>ESM</code> and <code>CJS</code> modules.</p>
+<pre><code class="language-ts"><span class="hl-3">import</span><span class="hl-0"> </span><span class="hl-5">Dlgit</span><span class="hl-0"> </span><span class="hl-3">from</span><span class="hl-0"> </span><span class="hl-2">&quot;dlgit&quot;</span><span class="hl-0">;</span><br/><br/><span class="hl-6">const</span><span class="hl-0"> </span><span class="hl-7">dlgit</span><span class="hl-0"> = </span><span class="hl-6">new</span><span class="hl-0"> </span><span class="hl-4">Dlgit</span><span class="hl-0">();</span><br/><span class="hl-5">dlgit</span><span class="hl-0">.</span><span class="hl-4">dl</span><span class="hl-0">(</span><span class="hl-2">&quot;Open-OJ/3OJ#gh-pages&quot;</span><span class="hl-0">, {</span><br/><span class="hl-0">    </span><span class="hl-5">sub:</span><span class="hl-0"> </span><span class="hl-2">&quot;problems&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-5">cache:</span><span class="hl-0"> </span><span class="hl-2">&quot;cache-dir&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-5">ttl:</span><span class="hl-0"> </span><span class="hl-8">1000</span><span class="hl-0"> * </span><span class="hl-8">60</span><span class="hl-0"> * </span><span class="hl-8">60</span><span class="hl-0"> * </span><span class="hl-8">24</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-5">to:</span><span class="hl-0"> </span><span class="hl-2">&quot;destination-dir&quot;</span><br/><span class="hl-0">});</span><br/><span class="hl-1">// all options are optional</span>
+</code></pre>
+</div></div><div class="col-4 col-menu menu-sticky-wrap menu-highlight"><nav class="tsd-navigation primary"><ul><li class="current"><a href="modules.html">Exports</a></li></ul></nav><nav class="tsd-navigation secondary menu-sticky"><ul><li class="tsd-kind-reference"><a href="modules.html#default" class="tsd-kind-icon">default</a></li><li class="tsd-kind-class"><a href="classes/Dlgit.html" class="tsd-kind-icon">Dlgit</a></li><li class="tsd-kind-variable"><a href="modules.html#default_cache" class="tsd-kind-icon">default_<wbr/>cache</a></li><li class="tsd-kind-function"><a href="modules.html#clear_cache" class="tsd-kind-icon">clear_<wbr/>cache</a></li><li class="tsd-kind-function"><a href="modules.html#hash" class="tsd-kind-icon">hash</a></li><li class="tsd-kind-function"><a href="modules.html#locate" class="tsd-kind-icon">locate</a></li><li class="tsd-kind-function"><a href="modules.html#setup_cache" class="tsd-kind-icon">setup_<wbr/>cache</a></li></ul></nav></div></div></div><footer class="with-border-bottom"><div class="container"><h2>Legend</h2><div class="tsd-legend-group"><ul class="tsd-legend"><li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li><li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li><li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li></ul></div><h2>Settings</h2><p>Theme <select id="theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></p></div></footer><div class="container tsd-generator"><p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div><div class="overlay"></div><script src="assets/main.js"></script></body></html>
