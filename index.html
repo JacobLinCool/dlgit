@@ -4,6 +4,7 @@
 </a>
 <p>Download part of a git repository without wasting your bandwidth.</p>
 <p><a href="https://www.npmjs.com/package/dlgit">NPM Package</a> | <a href="https://github.com/JacobLinCool/dlgit">GitHub Repository</a> | <a href="https://jacoblincool.github.io/dlgit/">Documentation</a></p>
+<p><img src="./demo/demo.gif" alt="DEMO"></p>
 
 <a href="#why-amp-how" id="why-amp-how" style="color: inherit; text-decoration: none;">
   <h2>Why &amp; How</h2>
@@ -18,6 +19,7 @@
 <li><code>--depth=1</code> to avoid downloading history of the repository.</li>
 </ul>
 </li>
+<li>setup <code>sparse-checkout</code> to only download the files that are required.</li>
 <li><code>git checkout</code> to check out the files you need.</li>
 <li>remove <code>.git</code> directory to avoid messing up the files.</li>
 <li>cache the files in the local cache.</li>
