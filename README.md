@@ -2,6 +2,8 @@
 
 Download part of a git repository without wasting your bandwidth.
 
+[NPM Package](https://www.npmjs.com/package/dlgit) | [GitHub Repository](https://github.com/JacobLinCool/dlgit) | [Documentation](https://jacoblincool.github.io/dlgit/)
+
 ## Why & How
 
 `dlgit` can download only part of a git repository and reduce the time and bandwidth you spend downloading the whole repository.
